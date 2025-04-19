@@ -529,10 +529,8 @@ export default function ChatPage() {
 
           // Improved error handling
           utterance.onend = () => {
-            // Only proceed if we're still in speaking mode
-            if (isSpeaking) {
-              speakNextChunk(index + 1)
-            }
+            // Move to the next chunk when this one finishes
+            speakNextChunk(index + 1)
           }
 
           utterance.onerror = (event) => {
@@ -544,7 +542,7 @@ export default function ChatPage() {
             }
 
             // Try to continue with next chunk despite error
-            if (isSpeaking && index + 1 < chunks.length) {
+            if (index + 1 < chunks.length) {
               console.log(`Attempting to continue with next chunk (${index + 1}/${chunks.length})`)
               setTimeout(() => speakNextChunk(index + 1), 500)
             } else {
@@ -558,7 +556,7 @@ export default function ChatPage() {
 
           // Speak with a small delay between chunks
           setTimeout(() => {
-            if (synthesis.current && isSpeaking) {
+            if (synthesis.current) {
               synthesis.current.speak(utterance)
             }
           }, 100)
@@ -566,7 +564,7 @@ export default function ChatPage() {
           console.error(`Error speaking chunk ${index}:`, error)
 
           // Try to recover by moving to next chunk
-          if (isSpeaking) {
+          if (index + 1 < chunks.length) {
             setTimeout(() => speakNextChunk(index + 1), 500)
           } else {
             setIsSpeaking(false)
