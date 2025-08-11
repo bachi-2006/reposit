@@ -1,18 +1,18 @@
-import type { Metadata } from "next"
+import type React from "react"
 import { Inter } from "next/font/google"
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
+import ClientProviders from "./client-providers"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
-export const metadata: Metadata = {
-  title: "Rohith Dachepally",
-  description: "Portfolio of Rohith Dachepally - Data Science Student",
+export const metadata = {
+  title: "Mio AI",
+  description: "Your intelligent AI assistant",
   icons: {
-    icon: [
-      { url: "/ai-avatar.png", sizes: "32x32", type: "image/png" },
-      { url: "/ai-avatar.png", sizes: "16x16", type: "image/png" },
-    ],
-    apple: [{ url: "/ai-avatar.png", sizes: "180x180", type: "image/png" }],
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
     generator: 'v0.dev'
 }
@@ -23,12 +23,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
-        <link rel="icon" href="/ai-avatar.png" sizes="any" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="light dark" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ClientProviders>
+          {children}
+          <Toaster />
+        </ClientProviders>
+      </body>
     </html>
   )
 }
-
